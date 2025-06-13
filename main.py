@@ -5,17 +5,21 @@ import uvicorn
 from constants import SERVER_URL, PORT, ENV
 from apps.calculator.route import router as calculator_router
 
-
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    app.add_middleware(
-        CORSMiddleware,
-        allow_origins=["https://scribblytics-frontend.vercel.app"],
-        allow_credentials=True,
-        allow_methods=["*"],
-        allow_headers=["*"],
-    )
     yield
+
+app = FastAPI(lifespan=lifespan)
+
+
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["https://scribblytics-frontend.vercel.app"],  # ✅ IMPORTANT
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 
 @app.get('/')
